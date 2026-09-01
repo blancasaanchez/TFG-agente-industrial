@@ -357,10 +357,6 @@ class Agent:
         la respuesta del operario, llamar a este método para restaurar el contexto
         de escritura que el modelo puede haber perdido.
 
-        Uso recomendado en main.py:
-            if prev_parsed.needs_clarification and pending_write_op:
-                new_parsed = Agent.merge_clarification_response(pending_write_op, new_parsed)
-
         Solo fusiona si:
         - la respuesta tiene intent de escritura (actualizar / registrar);
         - el write_values de la respuesta está vacío;
