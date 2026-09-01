@@ -1,0 +1,421 @@
+/* ============================================================
+   RESET Y BASE
+   ============================================================ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    height: var(--app-height, 100vh);
+    background: #f7f7fb;
+    font-family: Arial, sans-serif;
+    color: #222;
+    touch-action: pan-y;
+    -webkit-text-size-adjust: 100%;
+}
+
+.app-shell {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    height: var(--app-height, 100vh);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* ============================================================
+   TOPBAR (fija arriba)
+   ============================================================ */
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 700px;
+    padding: 12px 16px;
+    background: #f7f7fb;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 10;
+    box-sizing: border-box;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.icon-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 50%;
+    padding: 0;
+    background: none;
+    color: #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.icon-btn:hover {
+    background: #f2f2f2;
+}
+
+button {
+    padding: 11px 14px;
+    cursor: pointer;
+    border: none;
+    border-radius: 12px;
+    background: #720fdc;
+    color: white;
+    font-size: 0.95rem;
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+}
+button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.topbar-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+.topbar-back-icon {
+    color: #555;
+    flex-shrink: 0;
+}
+.topbar-name {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #222;
+    white-space: nowrap;
+}
+
+.topbar-user {
+    display: flex;
+    align-items: center;
+    border: none;
+    background: none;
+    padding: 4px 6px;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+.topbar-user:hover {
+    background: #efeafd;
+}
+.topbar-user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.topbar-user-avatar {
+    width: 36px;
+    height: 36px;
+    min-width: 28px;
+    border-radius: 20%;
+    background: #f2f2f2;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.topbar-user-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+.topbar-user-name {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #222;
+    line-height: 1.2;
+}
+.topbar-user-role {
+    margin: 0;
+    font-size: 0.72rem;
+    color: #999;
+    line-height: 1.2;
+}
+.hidden {
+    display: none;
+}
+
+/* ============================================================
+   OVERLAY COMPARTIDO
+   ============================================================ */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 30;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+.overlay.visible {
+    opacity: 1;
+}
+.overlay.hidden {
+    display: none;
+}
+
+/* ============================================================
+   CONTENIDO: CONSULTAS DE EJEMPLO
+   ============================================================ */
+.examples-wrapper {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 16px 24px;
+    box-sizing: border-box;
+}
+.examples-wrapper .hint {
+    color: #555;
+    font-size: 0.95rem;
+    margin: 16px 0;
+}
+.examples-category {
+    margin-bottom: 24px;
+}
+.examples-category h2 {
+    font-size: 1rem;
+    color: #720fdc;
+    margin: 0 0 10px;
+}
+.examples-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.example-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.example-item p {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.4;
+}
+.btn-copiar {
+    flex-shrink: 0;
+    background: none;
+    color: #720fdc;
+    border: 1.5px solid #720fdc;
+    padding: 7px 12px;
+    font-size: 0.82rem;
+    border-radius: 10px;
+}
+.btn-copiar:hover {
+    background: #efeafd;
+}
+.btn-copiar.copiado {
+    color: green;
+    border-color: green;
+}
+
+/* ============================================================
+   MENÚ AVATAR
+   ============================================================ */
+.dropdown-menu {
+    position: fixed;
+    top: 64px;
+    right: 16px;
+    width: 220px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    z-index: 31;
+    padding: 6px;
+    flex-direction: column;
+    gap: 2px;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.dropdown-menu.hidden {
+    display: none;
+}
+.dropdown-menu.visible {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+}
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: none;
+    color: #333;
+    text-align: left;
+    padding: 10px 10px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    text-decoration: none;
+    width: 100%;
+}
+
+.dropdown-item2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #c0392b;
+    text-align: left;
+    padding: 10px 10px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    text-decoration: none;
+    width: 100%;
+}
+
+.dropdown-item:hover {
+    background: #f2f2f2;
+}
+
+.dropdown-item2:hover {
+    background: #991608;
+}
+
+.dropdown-item-danger {
+    color: #c0392b;
+}
+
+.dropdown-item-danger2 {
+    color: white;
+    justify-content: center;
+}
+.dropdown-divider {
+    height: 1px;
+    background: #e5e7eb;
+    margin: 4px 6px;
+}
+
+/* ============================================================
+   MODAL PERFIL
+   ============================================================ */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(360px, 90vw);
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    z-index: 32;
+    overflow: hidden;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 16px 12px;
+    border-bottom: 1px solid #e5e7eb;
+}
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.05rem;
+}
+.modal-body {
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+.modal-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 20%;
+    background: #efeafd;
+    color: #720fdc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal-fields {
+    width: 100%;
+    margin: 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 12px;
+    font-size: 0.88rem;
+}
+.modal-fields dt {
+    color: #720fdc;
+    font-weight: 700;
+    padding-bottom: 5px;
+}
+.modal-fields dd {
+    margin: 0;
+    color: #222;
+    text-align: right;
+}
+/* ============================================================
+   RESPONSIVE MÓVIL
+   ============================================================ */
+@media (max-width: 480px) {
+    .examples-wrapper {
+        top: 64px;
+        padding: 0 12px 20px;
+    }
+    .topbar {
+        padding: 10px 12px;
+    }
+    .topbar-name {
+        font-size: 0.85rem;
+    }
+    .topbar-back-icon {
+        width: 20px;
+        height: 20px;
+    }
+    .topbar-user-text {
+        display: none;
+    }
+    .example-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .btn-copiar {
+        align-self: flex-end;
+    }
+    .dropdown-menu {
+        right: 12px;
+        left: 12px;
+        width: auto;
+        top: 60px;
+    }
+    .modal {
+        width: 92vw;
+    }
+}

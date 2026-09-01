@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Iniciar sesión · Asistente inteligente</title>
+    <link rel="stylesheet" href="{% static 'chat/css/examples.css' %}">
+</head>
+<body>
+    <div class="app-shell">
+
+        <!-- TOPBAR (fija arriba) -->
+        <div class="topbar">
+            <a class="topbar-title" id="btnInicio" href="{% url 'index' %}" aria-label="Volver al inicio">
+                <svg class="topbar-back-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                <p class="topbar-name">Consultas de ejemplo</p>
+            </a>
+
+            <button type="button" id="btnAvatarMenu" class="topbar-user" aria-label="Abrir menú de usuario" aria-haspopup="true">
+                <div class="topbar-user-info">
+                    <div class="topbar-user-avatar">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <div class="topbar-user-text">
+                        <p class="topbar-user-name">{{ usuario.username }}</p>
+                        <p class="topbar-user-role">{% for g in usuario.groups.all %}{{ g.name }}{% empty %}sin rol{% endfor %}</p>
+                    </div>
+                </div>
+            </button>
+        </div>
+
+        <!-- CONTENIDO -->
+        <div class="examples-wrapper" id="examplesWrapper">
+            <p class="hint">
+                Estos son ejemplos de consultas que puedes hacerle al agente. Pulsa "Copiar" y pégala en el chat.
+            </p>
+
+            <section class="examples-category">
+                <h2>Consultar información</h2>
+                <ul class="examples-list">
+                    <li class="example-item">
+                        <p>¿Qué máquinas hay en la nave A?</p>
+                        <button type="button" class="btn-copiar" data-texto="¿Qué máquinas hay en la nave A?">Copiar</button>
+                    </li>
+                    <li class="example-item">
+                        <p>¿Qué máquinas están averiadas?</p>
+                        <button type="button" class="btn-copiar" data-texto="¿Qué máquinas están averiadas?">Copiar</button>
+                    </li>
+                    <li class="example-item">
+                        <p>Qué operarios hay en turno de mañana</p>
+                        <button type="button" class="btn-copiar" data-texto="¿Qué operarios hay en turno de mañana?">Copiar</button>
+                    </li>
+                    <li class="example-item">
+                        <p>¿Qué ordenes estan pendientes?</p>
+                        <button type="button" class="btn-copiar" data-texto="¿Qué ordenes estan pendientes?">Copiar</button>
+                    </li>
+                    <li class="example-item">
+                        <p>¿Qué incidencias siguen abiertas?</p>
+                        <button type="button" class="btn-copiar" data-texto="¿Qué incidencias siguen abiertas?">Copiar</button>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="examples-category">
+                <h2>Consultas analíticas</h2>
+                <ul class="examples-list">
+                    <li class="example-item">
+                        <p>¿Cuántas máquinas hay en total?</p>
+                        <button type="button" class="btn-copiar" data-texto="¿Cuántas máquinas hay en total?">Copiar</button>
+                    </li>
+                    <li class="example-item">
+                        <p>¿Cuántas órdenes hay por estado?</p>
+                        <button type="button" class="btn-copiar" data-texto="¿Cuántas órdenes hay por estado?">Copiar</button>
+                    </li>
+                    <li class="example-item">
+                        <p>¿Qué nave tiene más máquinas?</p>
+                        <button type="button" class="btn-copiar" data-texto="¿Qué nave tiene más máquinas?">Copiar</button>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="examples-category">
+                <h2>Registrar y actualizar</h2>
+                <ul class="examples-list">
+                    <li class="example-item">
+                        <p>Registra una incidencia para una máquina, indicando el tipo y la descripción</p>
+                        <button type="button" class="btn-copiar" data-texto="Registra una incidencia para una máquina, indicando el tipo y la descripción">Copiar</button>
+                    </li>
+                    <li class="example-item">
+                        <p>Actualiza el estado de una máquina</p>
+                        <button type="button" class="btn-copiar" data-texto="Actualiza el estado de una máquina">Copiar</button>
+                    </li>
+                </ul>
+            </section>
+        </div>
+
+    </div> <!-- /app-shell -->
+
+    <!-- Overlay compartido -->
+    <div id="overlay" class="overlay hidden"></div>
+
+    <!-- Menú avatar -->
+    <div id="menuAvatar" class="dropdown-menu hidden" role="menu" aria-label="Menú de usuario">
+        <button type="button" id="btnVerPerfil" class="dropdown-item" role="menuitem">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Mi perfil
+        </button>
+        <div class="dropdown-divider"></div>
+        <a href="{% url 'logout' %}" class="dropdown-item dropdown-item-danger" role="menuitem">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Cerrar sesión
+        </a>
+    </div>
+
+    <!-- Modal perfil -->
+    <div id="modalPerfil" class="modal hidden" role="dialog" aria-label="Mi perfil">
+        <div class="modal-header">
+            <h2>Mi perfil</h2>
+            <button type="button" id="btnCerrarModalPerfil" class="icon-btn" aria-label="Cerrar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-avatar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+            <dl class="modal-fields">
+                <dt>Usuario</dt>
+                <dd>{{ usuario.username }}</dd>
+                <dt>Nombre</dt>
+                <dd>{{ usuario.first_name|default:"—" }} {{ usuario.last_name }}</dd>
+                <dt>Rol</dt>
+                <dd>{% for g in usuario.groups.all %}{{ g.name }}{% empty %}sin rol{% endfor %}</dd>
+                <dt>Correo</dt>
+                <dd>{{ usuario.email|default:"—" }}</dd>
+            </dl>
+            <a href="{% url 'logout' %}" class="dropdown-item2 dropdown-item-danger2" role="menuitem">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                Cerrar sesión
+            </a>
+        </div>
+    </div>
+
+    <script
+        src="{% static 'chat/js/examples.js' %}"
+        data-url-index="{% url 'index' %}"
+        defer
+    ></script>
+</body>
+</html>

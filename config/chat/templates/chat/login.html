@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Iniciar sesión · Asistente inteligente</title>
+    <link rel="stylesheet" href="{% static 'chat/css/login.css' %}">
+</head>
+<body>
+    <main class="login-shell">
+        <section class="brand-block" aria-label="Marca de la aplicación">
+            <div class="brand-icon-wrap">
+                <svg class="brand-icon" width="32" height="32" viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#8b5cf6"></stop>
+                            <stop offset="100%" stop-color="#6d28d9"></stop>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="35" cy="20" r="14"/>
+                    <rect x="28" y="32" width="14" height="22" transform="rotate(-15 35 32)"/>
+                    <circle cx="125" cy="20" r="14"/>
+                    <rect x="118" y="32" width="14" height="22" transform="rotate(15 125 32)"/>
+                    <rect x="10" y="50" width="140" height="100" rx="32"/>
+                    <rect x="22" y="62" width="116" height="76" rx="22" fill="white"/>
+                    <circle cx="55" cy="98" r="13"/>
+                    <circle cx="105" cy="98" r="13"/>
+                    <path d="M65 118 Q80 128 95 118" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+                    <rect x="65" y="160" width="30" height="22" rx="8"/>
+                </svg>
+            </div>
+            <div class="brand-copy">
+                <h1>Asistente inteligente</h1>
+                <p>Agente MES</p>
+            </div>
+        </section>
+
+        <section class="login-card" aria-labelledby="login-title">
+            <div class="login-head">
+                <div class="login-badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" class="login-badge-icon">
+                        <path d="M7 10V7a5 5 0 0 1 10 0v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <rect x="5" y="10" width="14" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="2"></rect>
+                        <circle cx="12" cy="15" r="1.3" fill="currentColor"></circle>
+                    </svg>
+                </div>
+                <h2 id="login-title">Iniciar sesión</h2>
+                <p>Accede con tu cuenta corporativa para usar el asistente.</p>
+            </div>
+
+            {% if error %}
+                <div class="message message-error" role="alert">{{ error }}</div>
+            {% endif %}
+
+            <form method="post" class="login-form" id="loginForm">
+                {% csrf_token %}
+
+                <label class="field">
+                    <span class="field-label">Usuario</span>
+                    <span class="field-input-wrap">
+                        <span class="field-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5Z" fill="currentColor"></path>
+                            </svg>
+                        </span>
+                        <input type="text" name="username" placeholder="Tu usuario corporativo" required autocomplete="username">
+                    </span>
+                </label>
+
+                <label class="field">
+                    <span class="field-label">Contraseña</span>
+                    <span class="field-input-wrap password-wrap">
+                        <span class="field-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M7 10V7a5 5 0 0 1 10 0v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <rect x="5" y="10" width="14" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="2"></rect>
+                            </svg>
+                        </span>
+                        <input id="passwordInput" type="password" name="password" placeholder="Introduce tu contraseña" required autocomplete="current-password">
+                        <button type="button" class="toggle-password" id="togglePassword" aria-label="Mostrar contraseña" aria-pressed="false">
+                            <svg class="icon-eye" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" fill="none" stroke="currentColor" stroke-width="2"></path>
+                                <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"></circle>
+                            </svg>
+                            <svg class="icon-eye-off hidden" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" fill="none" stroke="currentColor" stroke-width="2"></path>
+                                <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"></circle>
+                                <line x1="3" y1="3" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
+                            </svg>
+                        </button>
+                    </span>
+                </label>
+
+                <button type="submit" class="btn-primary" id="loginSubmit">Entrar</button>
+            </form>
+
+            <div class="login-footer">
+                <p class="helper-text">Acceso exclusivo para personal autorizado.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="{% static 'chat/js/login.js' %}" defer></script>
+</body>
+</html>

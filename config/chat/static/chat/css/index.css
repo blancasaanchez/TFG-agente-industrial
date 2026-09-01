@@ -1,0 +1,774 @@
+/* ============================================================
+   RESET Y BASE
+   ============================================================ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;           /* sin scroll de página */
+    width: 100%;
+    height: 100%;
+    height: var(--app-height, 100vh);
+    background: #f7f7fb;
+    font-family: Arial, sans-serif;
+    color: #222;
+    touch-action: pan-y;        /* permite scroll vertical dentro del chat, pero no horizontal */
+    -webkit-text-size-adjust: 100%;
+}
+
+.app-shell {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    height: var(--app-height, 100vh);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* ============================================================
+   TOPBAR (fija arriba)
+   ============================================================ */
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 700px;
+    padding: 12px 16px;
+    background: #f7f7fb;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 10;
+    box-sizing: border-box;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.icon-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 50%;
+    padding: 0;
+    background: none;
+    color: #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.icon-btn:hover {
+    background: #f2f2f2;
+}
+
+.topbar-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+}
+.topbar-icon {
+    color: #720fdc;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+.topbar-title-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+.topbar-name {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #222;
+    white-space: nowrap;
+}
+.topbar-subtitle {
+    margin: 0;
+    font-size: 0.78rem;
+    color: #888;
+}
+
+.topbar-user {
+    display: flex;
+    align-items: center;
+    border: none;
+    background: none;
+    padding: 4px 6px;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+.topbar-user:hover {
+    background: #efeafd;
+}
+.topbar-examples-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: none;
+    background: none;
+    color: #720fdc;
+    padding: 6px 10px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+.topbar-examples-btn:hover {
+    background: #f3ecff;
+}
+.topbar-user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.topbar-user-avatar {
+    width: 36px;
+    height: 36px;
+    min-width: 28px;
+    border-radius: 20%;
+    background: #f2f2f2;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.topbar-user-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+.topbar-user-name {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #222;
+    line-height: 1.2;
+}
+.topbar-user-role {
+    margin: 0;
+    font-size: 0.72rem;
+    color: #999;
+    line-height: 1.2;
+}
+
+/* ============================================================
+   CONTENEDOR SCROLLABLE
+   ============================================================ */
+.chat-wrapper {
+    position: absolute;
+    top: 70px;                 /* altura aprox de la topbar + padding */
+    left: 0;
+    right: 0;
+    bottom: 80px;              /* altura aprox del composer + padding */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 0 16px;
+    box-sizing: border-box;
+    background: #f7f7fb;
+    background-image:
+        linear-gradient(
+            rgba(247, 247, 251, 0.45),
+            rgba(247, 247, 251, 0.45)
+        ),
+        url("../img/chat_image.png");
+    background-repeat: repeat;
+    background-size: 550px;
+    background-position: center;
+}
+
+/* ============================================================
+   HISTORIAL DE CHAT
+   ============================================================ */
+.hint {
+    color: #555;
+    font-size: 0.95rem;
+    margin: 16px 0 16px 0;
+}
+
+.chat-history {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.chat-msg {
+    display: flex;
+    width: 100%;
+}
+.chat-msg-user {
+    justify-content: flex-end;
+}
+.chat-msg-assistant {
+    justify-content: flex-start;
+}
+
+.chat-bubble {
+    position: relative;
+    max-width: 88%;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: #f2f2f2;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+.chat-msg-user .chat-bubble {
+    background: #f5e7ff;
+    border-radius: 14px 14px 2px 14px;
+}
+.chat-msg-user .chat-bubble::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: -6px;
+    width: 12px;
+    height: 12px;
+    background: #f5e7ff;
+    clip-path: polygon(0 0, 0% 100%, 100% 100%);
+}
+.chat-kind-error .chat-bubble {
+    background: #fdecea;
+    color: #8a1f11;
+}
+.chat-kind-clarification .chat-bubble,
+.chat-kind-write_confirmation .chat-bubble,
+.chat-kind-confirmation .chat-bubble,
+.chat-kind-system .chat-bubble {
+    background: #fff7e6;
+}
+.chat-bubble small {
+    display: block;
+    margin-bottom: 6px;
+    color: #666;
+    font-size: 0.78rem;
+}
+.chat-bubble p {
+    margin: 0;
+    line-height: 1.45;
+    white-space: pre-line;
+}
+.chat-msg-enter {
+    animation: chatFadeIn 0.25s ease-out;
+}
+@keyframes chatFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   COMPOSER (fijo abajo)
+   ============================================================ */
+.composer {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 700px;
+    background: #f7f7fb;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.06);
+    z-index: 15;
+    box-sizing: border-box;
+}
+
+.composer form {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    box-sizing: border-box;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: #fff;
+}
+input[type="text"]:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+.actions,
+.voice-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.chat-input-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+.chat-input-row input[type="text"] {
+    flex: 1;
+    width: auto;
+}
+
+button {
+    padding: 11px 14px;
+    cursor: pointer;
+    border: none;
+    border-radius: 12px;
+    background: #720fdc;
+    color: white;
+    font-size: 0.95rem;
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+}
+button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+#btnGrabar {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 50%;
+    padding: 0;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    background: none;
+    color: #555;
+    touch-action: none;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+#btnGrabar.recording {
+    background: #720fdc;
+    color: white;
+}
+#btnGrabar.cancelando {
+    background: #e74c3c;
+    color: white;
+}
+
+#btnConfirmarTexto {
+    background: none;
+    color: green;
+    border: 2px solid green;
+}
+#btnConfirmarTexto:hover {
+    background: rgba(0, 128, 0, 0.15);
+}
+#btnConfirmarTexto:active {
+    background: rgba(0, 128, 0, 0.284);
+}
+
+#btnCancelarTexto {
+    background: none;
+    color: red;
+    border: 2px solid red;
+}
+#btnCancelarTexto:hover {
+    background: rgba(255, 0, 0, 0.15);
+}
+#btnCancelarTexto:active {
+    background: rgba(255, 0, 0, 0.284);
+}
+
+.input-wrapper {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+}
+.input-wrapper input[type="text"] {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 48px;
+}
+
+/* Aviso "Desliza para cancelar" que sustituye al cuadro de texto
+   mientras se está grabando (estilo WhatsApp). */
+.grabando-hint {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid #d1d5db;
+    color: #720fdc;
+    font-size: 0.92rem;
+    font-weight: 500;
+    white-space: nowrap;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+.grabando-hint.cancelando {
+    color: #e74c3c;
+    border-color: #e74c3c;
+}
+.grabando-hint-arrow {
+    flex-shrink: 0;
+    animation: grabando-hint-flechas 1s ease-in-out infinite;
+}
+@keyframes grabando-hint-flechas {
+    0%, 100% { transform: translateX(0); opacity: 0.55; }
+    50% { transform: translateX(-4px); opacity: 1; }
+}
+#btnEnviarTexto {
+    position: absolute !important;
+    top: 0;
+    bottom: 0;
+    right: 6px;
+    margin: auto 0;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    border-radius: 50%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    color: #720fdc;
+    flex-shrink: 0;
+    z-index: 1;
+}
+#btnEnviarTexto svg,
+#btnGrabar svg {
+    display: block;
+}
+
+.voz,
+.error {
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 16px;
+    white-space: pre-wrap;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.voz {
+    background: #f2f2f2;
+}
+.error {
+    background: #fdecea;
+    color: #8a1f11;
+}
+
+#estadoGrabacion {
+    position: absolute;
+    top: -36px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+#estadoGrabacion.visible {
+    opacity: 1;
+}
+
+.hidden {
+    display: none;
+}
+
+/* ============================================================
+   BOTÓN SCROLL ABAJO
+   ============================================================ */
+.scroll-down-btn {
+    position: fixed;
+    bottom: 90px;
+    right: max(24px, calc((100% - 700px) / 2 + 24px));
+    width: 40px;
+    height: 40px;
+    border-radius: 20%;
+    background: #720fdc;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px !important;
+    z-index: 20;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.scroll-down-btn.hidden {
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    display: flex;
+}
+
+/* ============================================================
+   OVERLAY COMPARTIDO
+   ============================================================ */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 30;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+.overlay.visible {
+    opacity: 1;
+}
+.overlay.hidden {
+    display: none;
+}
+
+/* ============================================================
+   MENÚ AVATAR
+   ============================================================ */
+.dropdown-menu {
+    position: fixed;
+    top: 64px;
+    right: 16px;
+    width: 220px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    z-index: 31;
+    padding: 6px;
+    flex-direction: column;
+    gap: 2px;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.dropdown-menu.hidden {
+    display: none;
+}
+.dropdown-menu.visible {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+}
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: none;
+    color: #333;
+    text-align: left;
+    padding: 10px 10px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    text-decoration: none;
+    width: 100%;
+}
+
+.dropdown-item2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #c0392b;
+    text-align: left;
+    padding: 10px 10px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    text-decoration: none;
+    width: 100%;
+}
+
+.dropdown-item:hover {
+    background: #f2f2f2;
+}
+
+.dropdown-item2:hover {
+    background: #991608;
+}
+
+.dropdown-item-danger {
+    color: #c0392b;
+}
+
+.dropdown-item-danger2 {
+    color: white;
+    justify-content: center;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: #e5e7eb;
+    margin: 4px 6px;
+}
+
+/* ============================================================
+   MODAL PERFIL
+   ============================================================ */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(360px, 90vw);
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    z-index: 32;
+    overflow: hidden;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 16px 12px;
+    border-bottom: 1px solid #e5e7eb;
+}
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.05rem;
+}
+.modal-body {
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+.modal-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 20%;
+    background: #efeafd;
+    color: #720fdc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal-fields {
+    width: 100%;
+    margin: 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 12px;
+    font-size: 0.88rem;
+}
+.modal-fields dt {
+    color: #720fdc;
+    font-weight: 700;
+    padding-bottom: 5px;
+}
+.modal-fields dd {
+    margin: 0;
+    color: #222;
+    text-align: right;
+}
+
+/* ============================================================
+   RESPONSIVE MÓVIL
+   ============================================================ */
+@media (max-width: 480px) {
+    .chat-wrapper {
+        top: 64px;
+        bottom: 72px;
+        padding: 0 12px 12px;
+    }
+    .topbar {
+        padding: 10px 12px;
+    }
+    .topbar-name {
+        font-size: 0.85rem;
+    }
+    .topbar-subtitle {
+        font-size: 0.7rem;
+    }
+    .topbar-icon {
+        width: 28px;
+        height: 28px;
+    }
+    .topbar-user-text {
+        display: none;
+    }
+    .topbar-examples-btn {
+        gap: 4px;
+        padding: 6px 8px;
+        font-size: 0.75rem;
+    }
+
+    .chat-history {
+        gap: 12px;
+    }
+    .chat-bubble {
+        max-width: 90%;
+        padding: 10px 12px;
+        border-radius: 12px;
+        font-size: 0.92rem;
+    }
+    .chat-msg-user .chat-bubble {
+        border-radius: 12px 12px 2px 12px;
+        margin-right: 4px;
+    }
+    .chat-msg-assistant .chat-bubble {
+        margin-left: 4px;
+    }
+    .chat-bubble small {
+        font-size: 0.72rem;
+        margin-bottom: 4px;
+    }
+    .chat-bubble p {
+        line-height: 1.4;
+    }
+
+    .composer {
+        padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    }
+    .chat-input-row {
+        gap: 6px;
+    }
+    #btnGrabar {
+        width: 52px;
+        height: 52px;
+    }
+
+    .scroll-down-btn {
+        right: 16px;
+        bottom: 80px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .dropdown-menu {
+        right: 12px;
+        left: 12px;
+        width: auto;
+        top: 60px;
+    }
+    .modal {
+        width: 92vw;
+    }
+}
