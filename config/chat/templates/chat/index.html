@@ -11,7 +11,7 @@
     <div class="app-shell">
 
         <!-- TOPBAR (fija arriba) -->
-        <div class="topbar">
+        <header class="topbar">
             <div class="topbar-title">
                 <svg class="topbar-icon" width="32" height="32" viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="35" cy="20" r="14"/>
@@ -26,7 +26,7 @@
                     <rect x="65" y="160" width="30" height="22" rx="8"/>
                 </svg>
                 <div class="topbar-title-text">
-                    <p class="topbar-name">Asistente inteligente</p>
+                    <h1 class="topbar-name">Asistente inteligente</h1>
                     <p class="topbar-subtitle">Agente MES</p>
                 </div>
             </div>
@@ -54,10 +54,10 @@
                     </div>
                 </div>
             </button>
-        </div>
+        </header>
 
         <!-- CONTENEDOR SCROLLABLE (el resto de la página) -->
-        <div class="chat-wrapper" id="chatWrapper">
+        <main class="chat-wrapper" id="chatWrapper">
             <p class="hint">
                 Puedes escribir o grabar audio. El audio primero se transcribe. Después confirmas el texto y solo entonces se envía al agente.
             </p>
@@ -83,7 +83,7 @@
                     <button type="button" id="btnCancelarTexto" class="hidden">✘ No, descartar</button>
                 </div>
             </div>
-        </div>
+        </main>
 
         <!-- COMPOSER (fijo abajo) -->
         <div class="composer">
