@@ -429,6 +429,25 @@ Valores canónicos:
 - `entrada`
 - `salida`
 
+### Unidad de medida
+Variantes aceptables:
+- kilos
+- kilogramos
+- kilo
+- kg
+- litros
+- litro
+- l
+- unidades
+- unidad
+- uds
+- piezas
+
+Valores canónicos:
+- `kg`
+- `litros`
+- `unidades`
+
 ### Tipos de máquina
 El operario puede usar términos parciales como:
 - torno
@@ -453,7 +472,8 @@ Regla:
 5. Si el usuario habla de materiales `movidos`, `entradas` o `salidas`, la entidad principal funcional debe ser `movimiento`.
 6. Las comparaciones textuales deben ser insensibles a mayúsculas y acentos.
 7. Las comparaciones numéricas deben tratarse como numéricas.
-8. Las reglas de negocio del dominio deben intentarse resolver antes de llegar al constructor SQL.
+8. Si el operario nombra una unidad de medida al preguntar por el stock de un material (por ejemplo "menos de 100 kg de stock"), debe añadirse, además del filtro numérico sobre `stock_actual` o `stock_minimo`, un filtro de igualdad sobre el campo `unidad` con su valor canónico. Sin ese filtro la comparación se aplicaría también a materiales medidos en otra unidad. Si el operario no nombra ninguna unidad, no debe añadirse ese filtro.
+9. Las reglas de negocio del dominio deben intentarse resolver antes de llegar al constructor SQL.
 
 ---
 
@@ -664,6 +684,7 @@ Regla:
 - ¿Qué materiales están en kg?
 - ¿Qué materiales tienen stock mínimo superior a 100?
 - ¿Qué materiales tienen stock actual menor a 100?
+- ¿Qué materiales tienen menos de 100 kg de stock?
 - ¿Qué materiales están por debajo del stock mínimo?
 
 IMPORTANTE: `material` no tiene campo `descripcion`. Cuando el operario busque un material
@@ -678,6 +699,34 @@ Usuario: "Qué materiales se llaman aluminio en lingotes"
   "area": "almacen",
   "entity_type": "material",
   "filters": [{"field": "nombre", "operator": "contains", "value": "aluminio en lingotes"}]
+}
+```
+
+IMPORTANTE: cuando la pregunta sobre stock incluya una unidad de medida, el filtro numérico
+por sí solo no basta, porque los materiales de la base de datos están medidos en unidades
+distintas (`kg`, `litros`, `unidades`). Debe añadirse también un filtro sobre `unidad`.
+
+Usuario: "¿Qué materiales tienen menos de 100 kg de stock?"
+```json
+{
+  "intent": "consultar",
+  "area": "almacen",
+  "entity_type": "material",
+  "filters": [
+    {"field": "stock_actual", "operator": "<", "value": 100},
+    {"field": "unidad", "operator": "=", "value": "kg"}
+  ]
+}
+```
+
+Contraste, para que quede claro que el filtro de unidad solo se añade si el operario la nombra —
+Usuario: "¿Qué materiales tienen menos de 100 de stock?"
+```json
+{
+  "intent": "consultar",
+  "area": "almacen",
+  "entity_type": "material",
+  "filters": [{"field": "stock_actual", "operator": "<", "value": 100}]
 }
 ```
 
