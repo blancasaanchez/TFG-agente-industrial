@@ -132,6 +132,14 @@ class QueryBuilder:
         self.specs, self._aliases = _load_specs_from_schema(schema_path)
 
     def build(self, req: ParsedRequest) -> QueryPlan:
+        # El bloqueo de las eliminaciones se comprueba antes que nada, incluso
+        # antes de resolver la entidad. Si se dejara para _build_delete, una
+        # petición de borrado mal formada (sin entity_type) moriría antes en la
+        # validación de entidades y devolvería al operario un error técnico que
+        # no explica el motivo real del rechazo.
+        if req.intent == "eliminar" and not self.allow_deletes:
+            raise ValueError("Las operaciones de eliminación están desactivadas por seguridad.")
+
         entity_type = req.entity_type or "desconocido"
         spec = self.specs.get(entity_type)
         if not spec:
@@ -531,8 +539,11 @@ class QueryBuilder:
         )
 
     def _build_delete(self, req: ParsedRequest, spec: EntitySpec) -> QueryPlan:
+        # Segunda barrera. build() ya rechaza las eliminaciones cuando
+        # allow_deletes es False, pero esta comprobación se mantiene para que
+        # el método siga siendo seguro si se le llama directamente.
         if not self.allow_deletes:
-            raise ValueError("Eliminar está desactivado. Usa --allow-deletes para activarlo.")
+            raise ValueError("Las operaciones de eliminación están desactivadas por seguridad.")
         if not spec.writable_table:
             raise ValueError(f"'{spec.name}' no admite eliminación.")
 
